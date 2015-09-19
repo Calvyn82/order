@@ -6,7 +6,3 @@ def count(string, substring, ticker = 0)
   end
   ticker
 end
-
-string    = "hi hi hi ih hi, mom hi"
-substring = "hi"
-puts count(string, substring)
