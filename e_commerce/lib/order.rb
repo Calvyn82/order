@@ -1,25 +1,30 @@
 require "json"
 
 class Order
-  def initialize(order_items:, tax_rate:, order_total: nil)
-    @order_items = order_items
-    @tax_rate    = tax_rate
-    @order_total = order_total ? order_total : calculate_total
+  def initialize(order_items:)
+    @order_items = order_items.sort_by { |item| item.name }
   end
 
-  attr_reader :order_items, :tax_rate, :order_total
+  attr_reader :order_items
+
+  def order_total(tax_rate)
+    calculate_total(tax_rate)
+  end
 
   def to_json
-    object_hash = { order_items: order_items, tax_rate: tax_rate, order_total: order_total }
+    object_hash = { 
+      order_items:
+      order_items.map do |item| 
+        item.to_json 
+      end
+    }
     object_hash.to_json
   end
 
   def self.from_json(string)
     data = JSON.parse(string)
     self.new(
-      order_items: data["order_items"], 
-      tax_rate:    data["tax_rate"], 
-      order_total: data["order_total"]
+      order_items: data["order_items"].map { |item| Item.from_json(item) }
     )
   end
 
@@ -29,7 +34,7 @@ class Order
 
   private
 
-  def calculate_total
+  def calculate_total(tax_rate)
     taxable_price = 0.00
     untaxed_price = 0.00
     order_items.each do |item|

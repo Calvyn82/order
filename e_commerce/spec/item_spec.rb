@@ -20,4 +20,15 @@ describe "Item" do
   it "rounds the price to the penny" do
     expect(@item.price).to be(100.00)
   end
+
+  it "converts an item to json" do
+    expect(@item.to_json).to be_a(String)
+  end
+
+  it "builds the item from json" do
+    json_string = @item.to_json
+    built_item  = Item.from_json(json_string)
+    expect(built_item).to be_an_instance_of(Item)
+    expect(built_item.price).to be(100.00)
+  end
 end
