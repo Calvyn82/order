@@ -19,8 +19,7 @@ describe "Order" do
   end
 
   it "normalizes the tax rate" do
-    expect(@order.tax_rate).to be_a(Float)
-    expect(@order.tax_rate).to eq(0.08)
+    expect(@order.tax_rate).to eq(8)
   end
 
   it "has an order total" do

@@ -3,7 +3,7 @@ require "json"
 class Order
   def initialize(order_items:, tax_rate:, order_total: nil)
     @order_items = order_items
-    @tax_rate    = tax_rate.to_f / 100
+    @tax_rate    = tax_rate
     @order_total = order_total ? order_total : calculate_total
   end
 
@@ -39,7 +39,7 @@ class Order
         untaxed_prace = (untaxed_price + item.price).round(2)
       end
     end
-    taxable_total = (taxable_price + (taxable_price * tax_rate)).round(2)
+    taxable_total = (taxable_price + (taxable_price * (tax_rate.to_f / 100))).round(2)
     (untaxed_price + taxable_total).round(2)
   end
 end
